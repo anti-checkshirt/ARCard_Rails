@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'users' => 'user#signup'
       post 'signin' => 'user#signin'
-      post 'image_regist' => 'user#image_regist'
+      post 'users/image_regist' => 'user#image_regist'
       get 'users' => 'user#show'
       patch 'users' => 'user#update'
       delete 'users' => 'user#delete'
