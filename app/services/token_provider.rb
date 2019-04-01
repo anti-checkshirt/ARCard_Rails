@@ -5,7 +5,8 @@ class TokenProvider
     end
 
     def refresh_tokens(user)
-      tokens = TokenProvider.create_pair_tokens id: user.id.to_s
+      tokens = TokenProvider.create_pair_tokens user_id: user.id.to_s
+
       user.update_attribute :refresh_token, tokens[:refresh_token]
 
       tokens
@@ -13,8 +14,8 @@ class TokenProvider
 
     def create_pair_tokens(payload)
       {
-        access_token: issue_token(payload.merge(exp: Time.current.to_i + 30.days)),
-        refresh_token: issue_token(payload.merge(exp: Time.current.to_i + 60.days))
+        access_token: issue_token(payload.merge(exp: Time.current.to_i + 30.minutes)),
+        refresh_token: issue_token(payload.merge(exp: Time.current.to_i + 1.months))
       }
     end
 
