@@ -4,10 +4,10 @@ require './app/services/firebase'
 
 class Api::V1::UsersController < Api::ApplicationController
   def signup
-    if (ENV[:API_KEY] == request.header[:HTTP_API_KEY]) && (ENV[:API_SECRET] == request.header[:HTTP_API_SECRET])
+    if (ENV["API_KEY"] == request.headers["HTTP_API_KEY"]) && (ENV["API_SECRET"] == request.headers["HTTP_API_SECRET"])
       firebase = FirebaseClient.new
       res = firebase.verification_user_by_id_token(params[:id_token])
-      if res.code == 200
+      if res.code == 403
         if User.find_by(id_token: params[:id_token])
           # 既にこのid_tokenを保有するUserが存在する場合
           response_unauthorized
@@ -25,10 +25,10 @@ class Api::V1::UsersController < Api::ApplicationController
   end
 
   def signin
-    if (ENV[:API_KEY] == request.header[:HTTP_API_KEY]) && (ENV[:API_SECRET] == request.header[:HTTP_API_SECRET])
+    if (ENV["API_KEY"] == request.headers["HTTP_API_KEY"]) && (ENV["API_SECRET"] == request.headers["HTTP_API_SECRET"])
       firebase = FirebaseClient.new
       res = firebase.verification_user_by_id_token(params[:id_token])
-      if res.code == 200
+      if res.code == 403
         user = User.find_by(id_token: params[:id_token])
         tokens = TokenProvider.refresh_tokens user
         response_success('signin', 'login', tokens)
