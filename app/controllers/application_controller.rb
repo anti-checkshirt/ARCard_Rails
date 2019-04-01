@@ -25,10 +25,6 @@ class ApplicationController < ActionController::API
     }, status: 400
   end
 
-  def unauthorized
-    render json: { status: :error, message: :unauthorized }, status: 401
-  end
-
   def record_invalid
     render json: {
         status: :error,

@@ -9,7 +9,7 @@ class Api::V1::UsersController < Api::ApplicationController
     if res.code == 200
       if User.find_by(id_token: params[:id_token])
         # 既にこのid_tokenを保有するUserが存在する場合
-        unauthorized
+        response_unauthorized
       else
         if (ENV[:API_KEY] == request.header[:HTTP_API_KEY]) && (ENV[:API_SECRET] == request.header[:HTTP_API_SECRET])
           @user = User.new(user_params)
@@ -32,7 +32,7 @@ class Api::V1::UsersController < Api::ApplicationController
       tokens = TokenProvider.refresh_tokens user
       response_success('signin', 'login', tokens)
     else
-      unauthorized
+      response_unauthorized
     end
   end
 
