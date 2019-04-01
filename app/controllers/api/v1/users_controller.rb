@@ -12,13 +12,7 @@ class Api::V1::UsersController < Api::ApplicationController
         unauthorized
       else
         if (ENV[:API_KEY] == request.header[:HTTP_API_KEY]) && (ENV[:API_SECRET] == request.header[:HTTP_API_SECRET])
-          @user = User.new(
-            name: params[:name],
-            id_token: params[:id_token],
-            occupation: params[:occupation],
-            age: params[:age],
-            gender: params[:gender]
-          )
+          @user = User.new(user_params)
           payload = TokenProvider.refresh_tokens @user
           response_success('signup', 'create', payload)
         else
@@ -40,5 +34,11 @@ class Api::V1::UsersController < Api::ApplicationController
     else
       unauthorized
     end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :id_token, :occupation, :age, :gender)
   end
 end
